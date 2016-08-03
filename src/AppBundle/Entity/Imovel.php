@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Imovel
@@ -25,6 +26,8 @@ class Imovel
      * @var string
      *
      * @ORM\Column(name="titulo", type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(min=5)
      */
     private $titulo;
 
@@ -32,6 +35,8 @@ class Imovel
      * @var string
      *
      * @ORM\Column(name="tamanho", type="decimal", precision=10, scale=2)
+     * @Assert\NotBlank()
+     * @Assert\GreaterThan(0)
      */
     private $tamanho;
 
@@ -39,6 +44,8 @@ class Imovel
      * @var string
      *
      * @ORM\Column(name="preco", type="decimal", precision=10, scale=2)
+     * @Assert\NotBlank()
+     * @Assert\GreaterThan(0)
      */
     private $preco;
 
@@ -46,6 +53,7 @@ class Imovel
      * @var string
      *
      * @ORM\Column(name="tipo", type="string", length=1)
+     * @Assert\NotBlank()
      */
     private $tipo;
 

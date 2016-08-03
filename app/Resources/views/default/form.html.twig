@@ -6,29 +6,8 @@
 </head>
 <body>
 	<h1>Cadastro de imóveis</h1>
-	<form action="/save">
-		<div>
-			<label for="titulo">Titulo</label>
-			<input type="text" name="titulo" id="titulo">
-		</div>
-		<div>
-			<label for="tamanho">Tamanho (m²)</label>
-			<input type="number" id="tamanho" name="tamanho">
-		</div>
-		<div>
-			<label for="preco">Preco (R$)</label>
-			<input type="text" id="preco" name="preco">
-		</div>
-		<div>
-			<label for="tipo">Tipo</label>
-			<select name="tipo" id="tipo">
-				<option value="c">Casa</option>
-				<option value="a">Apartamento</option>
-			</select>
-		</div>
-		<div>
-			<input type="submit" value="Cadastrar">
-		</div>
-	</form>
+	{{ form_start(form) }}
+	{{ form_widget(form) }}
+	{{ form_end(form) }}
 </body>
 </html>
