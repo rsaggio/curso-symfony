@@ -1,13 +1,32 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-	<meta charset="UTF-8">
-	<title>Cadastro de imóveis</title>
-</head>
-<body>
-	<h1>Cadastro de imóveis</h1>
-	{{ form_start(form) }}
-	{{ form_widget(form) }}
-	{{ form_end(form) }}
-</body>
-</html>
+{% extends 'base.html.twig' %}
+
+{%block body %}
+
+	<h1>Fale Conosco</h1>
+	<p>Estamos aqui para te ouvir.</p>
+
+
+	{% for flash_message in app.session.flashBag.get('notice') %}
+        <div>
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+    
+	<form action="/envia" method="post">
+		<div class="form-group">
+			<label for="nome">Nome:</label>
+			<input type="text" name="nome" id="nome" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="email">Email:</label>
+			<input type="text" name="email" id="email" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="msg">Mensagem:</label>
+			<textarea name="msg" id="msg" class="form-control"></textarea>
+		</div>
+		<div class="form-group">
+			<input type="submit" class="btn btn-success" value="Enviar">
+		</div>
+	</form>
+{% endblock %}

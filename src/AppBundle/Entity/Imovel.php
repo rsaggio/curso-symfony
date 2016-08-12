@@ -57,6 +57,12 @@ class Imovel
      */
     private $tipo;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="foto", type="string", length=50)
+     */
+    private $foto;
 
     /**
      * Get id
@@ -66,6 +72,30 @@ class Imovel
     public function getId()
     {
         return $this->id;
+    }
+
+     /**
+     * Set foto
+     *
+     * @param string $foto
+     *
+     * @return Imovel
+     */
+    public function setFoto($foto)
+    {
+        $this->foto = $foto;
+
+        return $this;
+    }
+
+    /**
+     * Get foto
+     *
+     * @return string
+     */
+    public function getFoto()
+    {
+        return $this->foto;
     }
 
     /**

@@ -7,10 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Imovel;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use AppBundle\Form\ImovelType;
+use AppBundle\Util\FileUploader;
 
 
 
@@ -34,65 +32,35 @@ class ImovelController extends Controller
     /**
      * @Route("/form", name="imoveis_form")
      */
-    public function formAction() {
-        // cria o form usando o helper
+    public function createAction(Request $request) {
 
-        $imovel = new Imovel();
-
-        $form = $this->createFormBuilder($imovel)
-        ->setAction($this->generateUrl('imoveis_save'))
-        ->setMethod('POST')
-        ->add('titulo', TextType::class)
-        ->add('tamanho', TextType::class)
-        ->add('preco', MoneyType::class)
-        ->add('tipo', ChoiceType::class,array (
-            'choices' => array(
-                'Casa' => 'c',
-                'Apartamento' => 'a'
-            )
-        ))
-        ->add('salvar', SubmitType::class, array('label' => 'Anunciar imóvel'))
-        ->getForm();
-
-
-        return $this->render('default/form.html.twig',array('form' => $form->createView()));
-    }
-
-    /**
-     * @Route("/save", name="imoveis_save")
-     */
-    public function saveAction(Request $request) {
-        $em = $this->getDoctrine()->getManager();
-        $form = $this->createFormBuilder(new Imovel())
-        ->setAction($this->generateUrl('imoveis_save'))
-        ->setMethod('POST')
-        ->add('titulo', TextType::class)
-        ->add('tamanho', TextType::class)
-        ->add('preco', MoneyType::class)
-        ->add('tipo', ChoiceType::class,array (
-            'choices' => array(
-                'Casa' => 'c',
-                'Apartamento' => 'a'
-            )
-        ))
-        ->add('salvar', SubmitType::class, array('label' => 'Anunciar imóvel'))
-        ->getForm();
-
+        $form = $this->createForm(ImovelType::class);
+        
         $form->handleRequest($request);
-         
-        $imovel = $form->getData();
-
+       
         if($form->isSubmitted() && $form->isValid()) {
+
+            $imovel = $form->getData();
+
+            $arquivo = $imovel->getFoto();
+
+            $diretorio = $this->get('kernel')->getRootDir()."\..\web\uploads";
+            
+            $uploader = new FileUploader($diretorio);
+            $fileName = $uploader->upload($arquivo);
+
+            $imovel->setFoto($fileName);
+
+            $em = $this->getDoctrine()->getManager();
             $em->persist($imovel);
             $em->flush();
             
-            return new Response('Produto adicionado com sucesso;');
+            $this->addFlash('notice', 'Imovel anunciado com sucesso');
 
-        }else {
-             return $this->render('default/form.html.twig',array('form' => $form->createView()));
+            return $this->redirectToRoute('imoveis_lista');
         }
 
+        return $this->render('default/form.html.twig',array('form' => $form->createView()));
     }
-
 
 }

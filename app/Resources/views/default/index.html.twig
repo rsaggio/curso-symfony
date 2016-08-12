@@ -1,18 +1,24 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Imobiliaria Feliz</title>
-</head>
-<body>
+{% extends 'base.html.twig' %}
+
+{%block title %}Imobiliaria Feliz {% endblock %}
+
+{%block body %}
+
+    {% for flash_message in app.session.flashBag.get('notice') %}
+        <div>
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+    
     <h1>Imóveis para alugar</h1>
     {% for imovel in imoveis %}
     <div>
+        <img src="{{ asset('/uploads/'~imovel.foto) }}" alt="{{imovel.titulo}}">
         <h2>{{imovel.titulo}}</h2>
         <p>Tipo do imovel: {{imovel.tipo}}</p> 
         <p>Tamanho: {{imovel.tamanho}}</p>       
         <p>Preço: R$ {{imovel.preco}}</p>        
     </div>
     {% endfor %}
-</body>
-</html>
+
+{% endblock %}
